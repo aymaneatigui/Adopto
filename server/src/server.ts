@@ -2,7 +2,7 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 
-import authRoute from "./Routes/authRoute";
+import authRoute from "./routes/authRoute";
 
 const app = express();
 
