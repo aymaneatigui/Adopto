@@ -8,9 +8,8 @@ export const signin = async (req, res, next) => {
         username: req.body.username,
       },
     });
-
     if (user === null) {
-      const err = new Error("Username or Password are incorect");
+      const err = new Error("incorect username");
       err.name = "UnauthorizedError";
       return next(err);
     }
@@ -18,7 +17,7 @@ export const signin = async (req, res, next) => {
     const isvalid = await comparePasswords(req.body.password, user.password);
 
     if (!isvalid) {
-      const err = new Error("Username or Password are incorect");
+      const err = new Error("incorect password ");
       err.name = "UnauthorizedError";
       return next(err);
     }
@@ -28,7 +27,7 @@ export const signin = async (req, res, next) => {
     next()
 
   } catch (error) {
-    const err = new Error("Username or Password are incorect");
+    const err = new Error("Error in sing-in");
     err.name = "UnauthorizedError";
     return next(err);
   }
@@ -43,7 +42,7 @@ export const signup = async (req, res, next) => {
     });
 
     if (exsit !== null) {
-      const err = new Error("Username taken");
+      const err = new Error("Username has already been taken");
       err.name = "BadRequestError";
       return next(err);
     }
@@ -55,11 +54,11 @@ export const signup = async (req, res, next) => {
         password : password,
       }
     })
-    res.json({ message : "create new user"})
+    res.json({ user})
     next()
   } catch (error) {
     console.log(error)
-    const err = new Error("ncorect");
+    const err = new Error("Error in sign-up");
     err.name = "UnauthorizedError";
     return next(err);
   }
