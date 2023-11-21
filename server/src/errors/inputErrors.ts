@@ -6,11 +6,14 @@ export const inputErrors = (req, res, next) => {
   if (errors.isEmpty()) {
     return next();
   }
-
-  const formattedErrors = errors.array().map((error) => ({
-    field: error.type,
-    message: error.msg,
-  }));
+  console.log(errors.array());
+  const formattedErrors = errors.array().map((e) => {
+    const err = e as any;
+    return {
+      field: err.path,
+      message: err.msg,
+    };
+  });
 
   res.status(400).json({ errors: formattedErrors });
 };

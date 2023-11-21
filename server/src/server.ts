@@ -3,6 +3,7 @@ import morgan from "morgan";
 import cors from "cors";
 
 import authRoute from "./routes/authRoute";
+import errorHandler from "./errors/errorHandler";
 
 const app = express();
 
@@ -17,5 +18,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/auth", authRoute);
+
+app.use(errorHandler);
 
 export default app;
