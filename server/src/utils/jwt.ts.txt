@@ -1,0 +1,57 @@
+const prisma = require('@prisma/client')
+const jwt = require('jsonwebtoken')
+
+// Generate a JWT access token
+function generateAccessToken(userId) {
+  return jwt.sign({ userId }, process.env.JWT_ACCESS_SECRET, { expiresIn: '15m' })
+}
+
+// Generate a JWT refresh token
+function generateRefreshToken(userId) {
+  return jwt.sign({ userId }, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' })
+}
+
+// Verify a JWT token
+function verifyToken(token, secret) {
+  return jwt.verify(token, secret)
+}
+
+// Authenticate a user and generate tokens
+async function authenticateUser(email, password) {
+  const user = await prisma.user.findUnique({ where: { email } })
+
+  if (!user || user.password !== password) {
+    throw new Error('Invalid email or password')
+  }
+
+  const accessToken = generateAccessToken(user.id)
+  const refreshToken = generateRefreshToken(user.id)
+
+  await prisma.refreshToken.create({
+    data: {
+      token: refreshToken,
+      userId: user.id,
+    },
+  })
+
+  return { accessToken, refreshToken }
+}
+
+// Refresh an access token using a refresh token
+async function refreshAccessToken(refreshToken) {
+  const token = await prisma.refreshToken.findUnique({ where: { token: refreshToken } })
+
+  if (!token) {
+    throw new Error('Invalid refresh token')
+  }
+
+  const user = await prisma.user.findUnique({ where: { id: token.userId } })
+
+  if (!user) {
+    throw new Error('User not found')
+  }
+
+  const accessToken = generateAccessToken(user.id)
+
+  return { accessToken }
+}
