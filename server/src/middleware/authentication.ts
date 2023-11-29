@@ -1,4 +1,3 @@
-import { type } from "os";
 import prisma from "../database/database";
 import {
   generateAccessToken,
@@ -34,9 +33,14 @@ export const signin = async (req, res, next) => {
     await saveRefreshToken(refreshToken);
 
     res.cookie("access_token", accessToken, { httpOnly: true });
-    res.cookie("refresh_token", refreshToken, { httpOnly: true, path: '/auth/refresh'});
+    res.cookie("refresh_token", refreshToken, {
+      httpOnly: true,
+      path: "/auth/refresh",
+    });
 
-    res.status(200).json({ message: "Tokens refreshed", accessToken, refreshToken});
+    res
+      .status(200)
+      .json({ message: "Tokens refreshed", accessToken, refreshToken });
     next();
   } catch (error) {
     if (!error?.name) {
@@ -74,7 +78,10 @@ export const signup = async (req, res, next) => {
     const refreshToken = generateRefreshToken(user);
     await saveRefreshToken(refreshToken);
     res.cookie("access_token", accessToken, { httpOnly: true });
-    res.cookie("refresh_token", refreshToken, { httpOnly: true, path: '/auth/refresh' });
+    res.cookie("refresh_token", refreshToken, {
+      httpOnly: true,
+      path: "/auth/refresh",
+    });
 
     res.status(200).json({ message: "Tokens refreshed" });
     next();

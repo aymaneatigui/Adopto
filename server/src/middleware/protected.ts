@@ -4,7 +4,7 @@ const protect = async (req, res, next) => {
   const accessToken = req.cookies.access_token;
 
   if (!accessToken) {
-    const err = new Error("Token not found");
+    const err = new Error("Token not found '''''''''''");
     err.name = "UnauthorizedError";
     return next(err);
   }
