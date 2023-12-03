@@ -15,5 +15,5 @@ export const inputErrors = (req, res, next) => {
     };
   });
 
-  res.status(400).json({ errors: formattedErrors });
+  res.status(400).json({ status: "error", message: formattedErrors });
 };

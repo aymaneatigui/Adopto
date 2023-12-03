@@ -38,13 +38,15 @@ export const signin = async (req, res, next) => {
       path: "/auth/refresh",
     });
 
-    res
-      .status(200)
-      .json({ message: "Tokens refreshed", accessToken, refreshToken });
+    res.status(200).json({
+      status: "success",
+      message: "authentication successful",
+      data: { id: user.id, username: user.username },
+    });
     next();
   } catch (error) {
     if (!error?.name) {
-      const err = new Error("Token is invalide");
+      const err = new Error("token is invalide");
       err.name = "UnauthorizedError";
       return next(err);
     } else {
@@ -62,7 +64,7 @@ export const signup = async (req, res, next) => {
     });
 
     if (exsit !== null) {
-      const err = new Error("Username has already been taken");
+      const err = new Error("username has already been taken");
       err.name = "BadRequestError";
       return next(err);
     }
@@ -83,11 +85,15 @@ export const signup = async (req, res, next) => {
       path: "/auth/refresh",
     });
 
-    res.status(200).json({ message: "Tokens refreshed" });
+    res.status(200).json({
+      status: "success",
+      message: "user successfully created.",
+      data: { id: user.id, username: user.username },
+    });
     next();
   } catch (error) {
     console.log(error);
-    const err = new Error("Error in sign-up");
+    const err = new Error("error in signup");
     err.name = "UnauthorizedError";
     return next(err);
   }
