@@ -29,7 +29,7 @@ const Signup = () => {
             Sign Up
           </h2>
           {/* </div> */}
-          <form className="mt-5 w-full" onSubmit={handleSubmit}>
+          <form className="mt-12 w-full" onSubmit={handleSubmit}>
             {/* <div className="mt-2">
                 <label
                   htmlFor="username"
