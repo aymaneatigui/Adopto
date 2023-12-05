@@ -9,7 +9,7 @@ export const generateAccessToken = (user) => {
   return jwt.sign(
     { accountId: user.id, username: user.username },
     process.env.JWT_ACCESS_SECRET,
-    { expiresIn: "1m" }
+    { expiresIn: "15m" }
   );
 };
 
@@ -95,4 +95,9 @@ export const saveRefreshToken = async (refreshToken) => {
     err.name = "UnauthorizedError";
     throw err;
   }
+};
+
+export const getExpDate = (token) => {
+  const decodedToken = jwt.decode(token) as JwtPayload;
+  return decodedToken.exp;
 };

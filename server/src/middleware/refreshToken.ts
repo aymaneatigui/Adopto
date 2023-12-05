@@ -1,4 +1,4 @@
-import { refreshAccessToken, verifyToken } from "../utils/jwt";
+import { getExpDate, refreshAccessToken, verifyToken } from "../utils/jwt";
 
 export const refreshToken = async (req, res, next) => {
   try {
@@ -13,7 +13,11 @@ export const refreshToken = async (req, res, next) => {
     const accessToken = await refreshAccessToken(refreshToken);
     res.cookie("access_token", accessToken, { httpOnly: true });
 
-    res.status(200).json({ status: "success", message: "token refreshed" });
+    res.status(200).json({
+      status: "success",
+      message: "token refreshed",
+      exp: getExpDate(accessToken),
+    });
     next();
   } catch (error) {
     const err = new Error("invalide refreshtoken");

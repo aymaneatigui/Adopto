@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { signin } from "./authActions";
+import {
+  refresh,
+  signinAction,
+  signoutAction,
+  signupAction,
+} from "./authActions";
 
 const initialState = {
   status: null,
@@ -10,23 +15,71 @@ const initialState = {
 const authentication = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    clearErrors: (state) => {
+      state.error = null;
+    },
+  },
   extraReducers(builder) {
-    builder.addCase(signin.pending, (state) => {
+    //SignIn
+    builder.addCase(signinAction.pending, (state) => {
       state.status = "loading";
       state.error = null;
     }),
-      builder.addCase(signin.rejected, (state, action) => {
+      builder.addCase(signinAction.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload.message;
+        action.payload
+          ? (state.error = action.payload.message)
+          : (state.error = action.error.message);
       }),
-      builder.addCase(signin.fulfilled, (state, action) => {
+      builder.addCase(signinAction.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.error = null;
         localStorage.setItem("user", JSON.stringify(action.payload.data));
         state.user = action.payload.data;
+      }),
+      //SignUp
+      builder.addCase(signupAction.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      }),
+      builder.addCase(signupAction.rejected, (state, action) => {
+        state.status = "failed";
+        action.payload
+          ? (state.error = action.payload.message)
+          : (state.error = action.error.message);
+      }),
+      builder.addCase(signupAction.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.error = null;
+        localStorage.setItem("user", JSON.stringify(action.payload.data));
+        state.user = action.payload.data;
+      }),
+      //SignOut
+      builder.addCase(signoutAction.fulfilled, (state) => {
+        state.status = null;
+        state.error = null;
+        state.user = null;
+        localStorage.removeItem("user");
+      }),
+      builder.addCase(signoutAction.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      }),
+      builder.addCase(signoutAction.rejected, (state, action) => {
+        state.status = "failed";
+        action.payload
+          ? (state.error = action.payload.message)
+          : (state.error = action.error.message);
+      }),
+      builder.addCase(refresh.rejected, (state, action) => {
+        state.status = "failed";
+        action.payload
+          ? (state.error = action.payload.message)
+          : (state.error = action.error.message);
       });
   },
 });
+export const { clearErrors } = authentication.actions;
 
 export default authentication.reducer;

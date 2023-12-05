@@ -1,7 +1,10 @@
 import prisma from "../database/database";
+import jwt from "jsonwebtoken";
+
 import {
   generateAccessToken,
   generateRefreshToken,
+  getExpDate,
   refreshAccessToken,
   saveRefreshToken,
 } from "../utils/jwt";
@@ -15,7 +18,7 @@ export const signin = async (req, res, next) => {
       },
     });
     if (user === null) {
-      const err = new Error("incorect username");
+      const err = new Error("incorect username or password");
       err.name = "UnauthorizedError";
       return next(err);
     }
@@ -23,7 +26,7 @@ export const signin = async (req, res, next) => {
     const isvalid = await comparePasswords(req.body.password, user.password);
 
     if (!isvalid) {
-      const err = new Error("incorect password ");
+      const err = new Error("incorect username or password ");
       err.name = "UnauthorizedError";
       return next(err);
     }
@@ -42,6 +45,7 @@ export const signin = async (req, res, next) => {
       status: "success",
       message: "authentication successful",
       data: { id: user.id, username: user.username },
+      exp: getExpDate(accessToken),
     });
     next();
   } catch (error) {
@@ -89,13 +93,37 @@ export const signup = async (req, res, next) => {
       status: "success",
       message: "user successfully created.",
       data: { id: user.id, username: user.username },
+      exp: getExpDate(accessToken),
     });
     next();
   } catch (error) {
-    console.log(error);
     const err = new Error("error in signup");
     err.name = "UnauthorizedError";
     return next(err);
   }
 };
-export const signout = (req, res, next) => {};
+export const signout = async (req, res, next) => {
+  try {
+    if (req.body.accountId) {
+      await prisma.token.deleteMany({
+        where: {
+          accountId: req.body.accountId,
+        },
+      });
+    }
+    res.clearCookie("access_token", { httpOnly: true });
+    res.clearCookie("refresh_token", {
+      httpOnly: true,
+      path: "/auth/refresh",
+    });
+    res.status(200).json({
+      status: "success",
+      message: "user successfully signout.",
+    });
+    next();
+  } catch (error) {
+    const err = new Error("error in signout");
+    err.name = "UnauthorizedError";
+    return next(err);
+  }
+};

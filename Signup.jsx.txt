@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { signinAction } from "../features/auth/authActions";
+import { signup } from "../../features/auth/authActions.jsx";
 import { useDispatch, useSelector } from "react-redux";
 
-const Profile = () => {
+const Signup = () => {
   const dispatch = useDispatch();
   const { status, error, user } = useSelector((state) => state.auth);
 
@@ -15,11 +15,12 @@ const Profile = () => {
       username,
       password,
     };
-    dispatch(signinAction(credentials));
+    console.log(user);
+    dispatch(signup(credentials));
   };
   return (
     <>
-      <div>Profile of user: {username}</div>
+      <div>Signup of user: {username}</div>
       {user ? (
         <div>
           <h1>username : {user.username}</h1>
@@ -68,4 +69,4 @@ const Profile = () => {
     </>
   );
 };
-export default Profile;
+export default Signup;

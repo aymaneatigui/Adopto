@@ -3,16 +3,16 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store";
 
-import Header from "./components/Header";
+import Header from "./components/Header/Header.jsx";
 
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Signin from "./pages/auth/Signin";
-import Signup from "./pages/auth/Signupp";
+import Signup from "./pages/auth/Signup";
 
 const App = () => {
   return (
-    <div className=" flex flex-col h-screen w-full bg-slate-50 font-inter ">
+    <div className=" flex h-screen w-full flex-col bg-slate-50 font-inter ">
       <Provider store={store}>
         <Router>
           <Header />

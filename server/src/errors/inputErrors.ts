@@ -6,7 +6,6 @@ export const inputErrors = (req, res, next) => {
   if (errors.isEmpty()) {
     return next();
   }
-  console.log(errors.array());
   const formattedErrors = errors.array().map((e) => {
     const err = e as any;
     return {
