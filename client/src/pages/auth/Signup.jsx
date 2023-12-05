@@ -2,6 +2,7 @@ import useSignup from "../../hooks/auth/useSignup.jsx";
 import GeneralError from "../error/GeneralError.jsx";
 import InputError from "../error/InputError.jsx";
 import BtnLoading from "./components/BtnLoading.jsx";
+import SignupBtn from "./components/SignupBtn.jsx";
 
 const Signup = () => {
   const {
@@ -24,13 +25,12 @@ const Signup = () => {
               src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
               alt="Your Company"
             /> */}
-          <h2 className=" text-center text-3xl font-bold leading-9 tracking-tight text-slate-900">
-            Create your account
+          <h2 className=" text-center text-5xl font-bold leading-9 tracking-tight text-slate-900">
+            Sign Up
           </h2>
           {/* </div> */}
           <form className="mt-5 w-full" onSubmit={handleSubmit}>
-            <div>
-              <div className="mt-2">
+            {/* <div className="mt-2">
                 <label
                   htmlFor="username"
                   className="block text-sm font-medium leading-6 text-slate-900"
@@ -49,9 +49,7 @@ const Signup = () => {
                 />
                 <InputError fieldName={"username"} />
               </div>
-            </div>
 
-            <div>
               <div className="mt-2">
                 <label
                   htmlFor="password"
@@ -70,62 +68,60 @@ const Signup = () => {
                   onFocus={clearPasswordError}
                 />
                 <InputError fieldName={"password"} />
-              </div>
+            </div> */}
+
+            <div className="relative mt-12">
+              <input
+                id="username"
+                type="text"
+                {...register("username")}
+                placeholder="Enter your username"
+                onFocus={clearUsernameError}
+                className={`peer mt-1 w-full border-0 border-b-2  bg-transparent px-4 py-1 font-medium ring-0 placeholder:text-transparent focus:border-b-slate-700 focus:outline-none focus:ring-0 
+                ${usernameError ? "border-red-500" : "border-slate-300 "}`}
+              />
+              <label
+                htmlFor="username"
+                className={`pointer-events-none absolute left-0 top-0 ml-1 origin-left -translate-y-1/2 transform text-sm font-medium  leading-6 transition-all duration-300 ease-in-out focus:opacity-75 peer-placeholder-shown:top-1/2  peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:pl-0 peer-focus:text-sm
+                ${
+                  usernameError
+                    ? "text-red-500 peer-placeholder-shown:text-red-500 peer-focus:text-red-500"
+                    : "text-slate-500 peer-placeholder-shown:text-slate-900 peer-focus:text-slate-500 "
+                }`}
+              >
+                Username
+              </label>
             </div>
+            <InputError fieldName={"username"} />
+
+            <div className="relative mt-5">
+              <input
+                id="password"
+                type="password"
+                placeholder="Enter your password"
+                {...register("password")}
+                onFocus={clearPasswordError}
+                className={`peer mt-1 w-full border-0 border-b-2  bg-transparent px-5 py-1 font-medium ring-0 placeholder:text-transparent focus:border-b-slate-700 focus:outline-none focus:ring-0
+                ${passwordError ? "border-red-500" : "border-slate-300"}`}
+              />
+              <label
+                htmlFor="password"
+                className={`pointer-events-none absolute left-0 top-0 ml-1 origin-left -translate-y-1/2 transform text-sm font-medium  leading-6 transition-all duration-300 ease-in-out focus:opacity-75 peer-placeholder-shown:top-1/2  peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:pl-0 peer-focus:text-sm
+                ${
+                  passwordError
+                    ? "text-red-500 peer-placeholder-shown:text-red-500 peer-focus:text-red-500"
+                    : "text-slate-500 peer-placeholder-shown:text-slate-900 peer-focus:text-slate-500 "
+                }`}
+              >
+                Password
+              </label>
+            </div>
+            <InputError fieldName={"password"} />
+
             <GeneralError />
 
             <div className="mt-4 flex  justify-end">
-              {loading ? (
-                <>
-                  <BtnLoading />
-                </>
-              ) : (
-                <>
-                  <button
-                    type="submit"
-                    className="me-2 flex w-auto items-center justify-center whitespace-nowrap rounded-full border border-slate-300 px-5 py-1.5 text-sm font-medium leading-6 text-slate-900 shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                  >
-                    Sign up
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 256 256"
-                      id="user-plus"
-                      className="ml-2 h-4"
-                    >
-                      <line
-                        x1="176"
-                        x2="224"
-                        y1="56"
-                        y2="56"
-                        fill="none"
-                        stroke="#000"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="19"
-                      ></line>
-                      <line
-                        x1="200"
-                        x2="200"
-                        y1="32"
-                        y2="80"
-                        fill="none"
-                        stroke="#000"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="19"
-                      ></line>
-                      <path
-                        fill="none"
-                        stroke="#000"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="19"
-                        d="M30.989 215.99064a112.03731 112.03731 0 0 1 194.02311.002M188.05124 118.18275a63.96647 63.96647 0 1 1-45.27249-84.46794"
-                      ></path>
-                    </svg>
-                  </button>
-                </>
-              )}
+              {loading ? <BtnLoading /> : <SignupBtn />}
             </div>
           </form>
         </div>
