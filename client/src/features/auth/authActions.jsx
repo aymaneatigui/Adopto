@@ -1,3 +1,4 @@
+import { googleLogout } from "@react-oauth/google";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -5,6 +6,7 @@ const signin_url = `http://localhost:3001/auth/signin`;
 const signup_url = `http://localhost:3001/auth/signup`;
 const signout_url = `http://localhost:3001/auth/signout`;
 const refresh_url = `http://localhost:3001/auth/refresh`;
+const google_auth = `http://localhost:3001/auth/google`;
 
 export const signinAction = createAsyncThunk(
   "auth/signin",
@@ -18,7 +20,7 @@ export const signinAction = createAsyncThunk(
           console.log("it's called from the singin");
           dispatch(refresh());
         },
-        (response.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 1000,
+        (response.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 10000,
       );
 
       return response.data;
@@ -43,7 +45,7 @@ export const signupAction = createAsyncThunk(
         () => {
           dispatch(refresh());
         },
-        (response.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 1000,
+        (response.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 10000,
       );
 
       return response.data;
@@ -63,6 +65,7 @@ export const signoutAction = createAsyncThunk(
       const response = await axios.post(signout_url, credentials, {
         withCredentials: true,
       });
+      googleLogout();
       return response.data;
     } catch (error) {
       if (!error.response) {
@@ -92,7 +95,7 @@ export const refresh = createAsyncThunk(
 
           dispatch(refresh());
         },
-        (response.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 1000,
+        (response.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 10000,
       ); // Refresh 5 seconds before the token expires
       return response.data;
     } catch (error) {
@@ -105,6 +108,37 @@ export const refresh = createAsyncThunk(
         window.location.href = "/signin";
       }
       return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const googleSigninAction = createAsyncThunk(
+  "auth/googleSignin",
+  async (response, { rejectWithValue, dispatch }) => {
+    try {
+      const data = await axios.post(
+        google_auth,
+        {
+          code: response.code,
+          type : response.type
+        },
+        { withCredentials: true },
+      );
+
+      console.log(data.data);
+      setTimeout(
+        () => {
+          console.log("it's called from the singin");
+          dispatch(refresh());
+        },
+        (data.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 10000,
+      );
+      return data.data;
+    } catch (error) {
+      if (!error.data) {
+        throw error;
+      }
+      return rejectWithValue(error.data.data);
     }
   },
 );

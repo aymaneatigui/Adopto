@@ -13,7 +13,9 @@ datasource db {
 model account {
   id       String  @id @default(auto()) @map("_id") @db.ObjectId
   username String  @unique
-  password String
+  email    String? 
+  googleId String? @unique
+  password String?
   token    token[]
 }
 

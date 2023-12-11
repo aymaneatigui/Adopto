@@ -97,11 +97,14 @@ export const signup = async (req, res, next) => {
     });
     next();
   } catch (error) {
+     console.error(error.message);
+  console.error(error.stack);
     const err = new Error("error in signup");
     err.name = "UnauthorizedError";
     return next(err);
   }
 };
+
 export const signout = async (req, res, next) => {
   try {
     if (req.body.accountId) {

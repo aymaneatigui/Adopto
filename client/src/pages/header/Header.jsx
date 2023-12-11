@@ -7,7 +7,7 @@ const Header = () => {
   const { user } = useSelector((state) => state.auth);
 
   return (
-    <header className="flex h-14 w-full items-center justify-between px-12 pt-2  text-slate-900 ">
+    <header className="flex h-14 w-full items-center justify-between px-12 pt-2  text-slate-900 z-10">
       <div className="font-inter text-2xl font-medium">
         <Link to={"/"}>Adopto</Link>
       </div>

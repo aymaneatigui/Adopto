@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
+  googleSigninAction,
   refresh,
   signinAction,
   signoutAction,
@@ -77,6 +78,24 @@ const authentication = createSlice({
         action.payload
           ? (state.error = action.payload.message)
           : (state.error = action.error.message);
+      }),
+      //Signin Google:
+      // Add this to your extraReducers
+      builder.addCase(googleSigninAction.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      }),
+      builder.addCase(googleSigninAction.rejected, (state, action) => {
+        state.status = "failed";
+        action.payload
+          ? (state.error = action.payload.message)
+          : (state.error = action.error.message);
+      }),
+      builder.addCase(googleSigninAction.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.error = null;
+        localStorage.setItem("user", JSON.stringify(action.payload.data));
+        state.user = action.payload.data;
       });
   },
 });
