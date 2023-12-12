@@ -13,8 +13,8 @@ datasource db {
 model account {
   id       String  @id @default(auto()) @map("_id") @db.ObjectId
   username String  @unique
-  email    String? 
-  googleId String? @unique
+  email    String?
+  googleId String?
   password String?
   token    token[]
 }

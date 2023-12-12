@@ -3,11 +3,11 @@ import InputError from "../error/InputError.jsx";
 import GeneralError from "../error/GeneralError.jsx";
 import BtnLoading from "./components/BtnLoading.jsx";
 import SigninBtn from "./components/SigninBtn.jsx";
-import Google from "./components/Google.jsx";
-import useOneTapAuth from "../../hooks/auth/useOneTapAuth.jsx";
+import Google from "./components/GoogleBtn.jsx";
+// import useOneTapAuth from "../../hooks/auth/useOneTapAuth.jsx";
 
 const Signin = () => {
-  useOneTapAuth();
+  // useOneTapAuth();
 
   const {
     register,
@@ -34,44 +34,6 @@ const Signin = () => {
           </h2>
           {/* </div> */}
           <form className="mt-14 w-full" onSubmit={handleSubmit}>
-            {/* <div className="mt-2">
-                <label
-                  htmlFor="username"
-                  className="block text-sm font-medium leading-6 text-slate-900"
-                >
-                  Username
-                </label>
-                <input
-                  id="username"
-                  type="text"
-                  {...register("username")}
-                  autoComplete="username"
-                  placeholder="Enter your username"
-                  className={`block w-full rounded-md border-0 py-1.5 text-slate-900 shadow-sm ring-1 ring-inset  placeholder:text-sm placeholder:text-slate-400 focus:ring-1 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6
-                  ${usernameError ? "ring-red-500" : "ring-slate-300"}`}
-                  onFocus={clearUsernameError}
-                />
-                <InputError fieldName={"username"} />
-              </div> */}
-            {/* <div className="mt-2">
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium leading-6 text-slate-900"
-              >
-                Password
-              </label>
-              <input
-                id="password"
-                type="password"
-                placeholder="Enter your password"
-                {...register("password")}
-                autoComplete="current-password"
-                className={`block w-full rounded-md border-0 py-1.5 text-slate-900 shadow-sm ring-1 ring-inset placeholder:text-sm placeholder:text-slate-400 focus:ring-1 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6
-                  ${passwordError ? "ring-red-500" : "ring-slate-300"}`}
-                onFocus={clearPasswordError}
-              />
-              <InputError fieldName={"password"} />
-            </div> */}
             <div className="relative mt-5">
               <input
                 id="username"
@@ -80,7 +42,10 @@ const Signin = () => {
                 placeholder="Enter your username"
                 onFocus={clearUsernameError}
                 className={`peer mt-1 w-full border-0 border-b-2  bg-transparent px-2 py-1 font-medium ring-0 placeholder:text-transparent focus:border-b-slate-700 focus:outline-none focus:ring-0 
-                ${usernameError ? "border-red-500" : "border-slate-300 "}`}
+                ${usernameError ? "border-red-500" : "border-slate-300 "}
+                ${loading && "animate-pulse "}
+                `}
+                disabled={loading ? true : false}
               />
               <label
                 htmlFor="username"
@@ -89,7 +54,8 @@ const Signin = () => {
                   usernameError
                     ? "text-red-500 peer-placeholder-shown:text-red-500 peer-focus:text-red-500"
                     : "text-gray-500 peer-placeholder-shown:text-gray-900 peer-focus:text-gray-500 "
-                }`}
+                }
+                `}
               >
                 Username :
               </label>
@@ -103,7 +69,10 @@ const Signin = () => {
                 {...register("password")}
                 onFocus={clearPasswordError}
                 className={`peer mt-1 w-full border-0 border-b-2  bg-transparent px-2 py-1 font-medium ring-0 placeholder:text-transparent focus:border-b-slate-700 focus:outline-none focus:ring-0 
-                ${passwordError ? "border-red-500" : "border-slate-300"}`}
+                ${passwordError ? "border-red-500" : "border-slate-300"}
+                ${loading && "animate-pulse "}
+                `}
+                disabled={loading ? true : false}
               />
               <label
                 htmlFor="password"
@@ -143,44 +112,7 @@ const Signin = () => {
               </div>
             </div>
 
-            <div className="mt-6 grid grid-cols-2 gap-2">
-              {/* <div>
-                <a
-                  href="#"
-                  className="flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-8 py-3 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
-                >
-                  <img
-                    className="h-5 w-5"
-                    src="https://www.svgrepo.com/show/512120/facebook-176.svg"
-                    alt=""
-                  />
-                </a>
-              </div>
-              <div>
-                <a
-                  href="#"
-                  className="flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-8 py-3 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
-                >
-                  <img
-                    className="h-5 w-5"
-                    src="https://www.svgrepo.com/show/513008/twitter-154.svg"
-                    alt=""
-                  />
-                </a>
-              </div> */}
-              {/* <div>
-                <a
-                  href="#"
-                  className="flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-8 py-3 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
-                >
-                  <img
-                    className="h-5 w-5"
-                    src="https://www.svgrepo.com/show/506498/google.svg"
-                    alt=""
-                  />
-                </a>
-              </div> */}
-              <Google />
+            <div className="mt-6 w-full">
               <Google />
             </div>
           </div>

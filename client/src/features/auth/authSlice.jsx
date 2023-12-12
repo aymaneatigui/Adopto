@@ -80,7 +80,6 @@ const authentication = createSlice({
           : (state.error = action.error.message);
       }),
       //Signin Google:
-      // Add this to your extraReducers
       builder.addCase(googleSigninAction.pending, (state) => {
         state.status = "loading";
         state.error = null;

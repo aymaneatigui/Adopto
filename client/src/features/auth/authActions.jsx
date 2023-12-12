@@ -17,7 +17,6 @@ export const signinAction = createAsyncThunk(
       });
       setTimeout(
         () => {
-          console.log("it's called from the singin");
           dispatch(refresh());
         },
         (response.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 10000,
@@ -91,8 +90,6 @@ export const refresh = createAsyncThunk(
       // Set a timeout to refresh the token a bit before it expires
       setTimeout(
         () => {
-          console.log("it's called from the refresh");
-
           dispatch(refresh());
         },
         (response.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 10000,
@@ -120,25 +117,27 @@ export const googleSigninAction = createAsyncThunk(
         google_auth,
         {
           code: response.code,
-          type : response.type
+          type: response.type,
         },
-        { withCredentials: true },
+        {
+          withCredentials: true,
+          headers: {
+            "Cross-Origin-Opener-Policy": "same-origin allow-popups",
+          },
+        },
       );
-
-      console.log(data.data);
       setTimeout(
         () => {
-          console.log("it's called from the singin");
           dispatch(refresh());
         },
         (data.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 10000,
       );
       return data.data;
     } catch (error) {
-      if (!error.data) {
+      if (!error.response) {
         throw error;
       }
-      return rejectWithValue(error.data.data);
+      return rejectWithValue(error.response.data);
     }
   },
 );
