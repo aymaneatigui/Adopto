@@ -9,6 +9,8 @@ import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Signin from "./pages/auth/Signin";
 import Signup from "./pages/auth/Signup";
+import Protected from "./Protected.jsx";
+import NotFound from "./pages/NotFound.jsx";
 
 const App = () => {
   return (
@@ -17,10 +19,12 @@ const App = () => {
         <Router>
           <Header />
           <Routes>
-            <Route path="/" Component={Home} />
-            <Route path="/:username" Component={Profile} />
-            <Route path="/signin" Component={Signin} />
-            <Route path="/signup" Component={Signup} />
+            <Route path="/" element={<Home />} />
+            <Route path="/settings/:username" element={<Protected><Profile /></Protected>} />
+            <Route path="/settings/:username" element={<Protected><Profile /></Protected>} />
+            <Route path="/signin" element={<Signin />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="*" element={<NotFound />}/>
           </Routes>
         </Router>
       </Provider>
