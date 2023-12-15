@@ -44,7 +44,8 @@ export const signin = async (req, res, next) => {
     res.status(200).json({
       status: "success",
       message: "authentication successful",
-      data: { id: user.id, username: user.username },
+      account: { id: user.id, username: user.username, email: user.email },
+      profile: {},
       exp: getExpDate(accessToken),
     });
     next();
@@ -80,6 +81,22 @@ export const signup = async (req, res, next) => {
         password: password,
       },
     });
+
+    try {
+      await prisma.profile.create({
+        data: {
+          accountId: user.id,
+        },
+      });
+    } catch (error) {
+      await prisma.account.delete({
+        where: { id: user.id },
+      });
+      const err = new Error("error in signup");
+      err.name = "UnauthorizedError";
+      return next(err);
+    }
+
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
     await saveRefreshToken(refreshToken);
@@ -92,7 +109,8 @@ export const signup = async (req, res, next) => {
     res.status(200).json({
       status: "success",
       message: "user successfully created.",
-      data: { id: user.id, username: user.username },
+      account: { id: user.id, username: user.username },
+      profile: {},
       exp: getExpDate(accessToken),
     });
     next();

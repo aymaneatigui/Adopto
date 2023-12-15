@@ -34,7 +34,6 @@ export const googleAuth = async (req, res, next) => {
       });
       if (userExsit) {
         //Sign In
-
         const accessToken = generateAccessToken(userExsit);
         const refreshToken = generateRefreshToken(userExsit);
         await saveRefreshToken(refreshToken);
@@ -47,7 +46,16 @@ export const googleAuth = async (req, res, next) => {
         res.status(200).json({
           status: "success",
           message: "authentication successful",
-          data: { id: userExsit.id, username: userExsit.username },
+          account: {
+            id: userExsit.id,
+            username: userExsit.username,
+            email: userExsit.email,
+          },
+          profile: {
+            fname: decodedToken.given_name,
+            lname: decodedToken.family_name,
+            picture: decodedToken.picture,
+          },
           exp: getExpDate(accessToken),
         });
         return next();
@@ -86,7 +94,6 @@ export const googleAuth = async (req, res, next) => {
               },
             });
           }
-
           const user = await prisma.account.create({
             data: {
               username: username,
@@ -94,6 +101,23 @@ export const googleAuth = async (req, res, next) => {
               email: decodedToken.email,
             },
           });
+          try {
+            await prisma.profile.create({
+              data: {
+                accountId: user.id,
+                fname: decodedToken.given_name,
+                lname: decodedToken.family_name,
+                picture: decodedToken.picture,
+              },
+            });
+          } catch (error) {
+            await prisma.account.delete({
+              where: { id: user.id },
+            });
+            const err = new Error("error in signup with google");
+            err.name = "UnauthorizedError";
+            return next(err);
+          }
 
           const accessToken = generateAccessToken(user);
           const refreshToken = generateRefreshToken(user);
@@ -107,7 +131,16 @@ export const googleAuth = async (req, res, next) => {
           res.status(200).json({
             status: "success",
             message: "user successfully created.",
-            data: { id: user.id, username: user.username, email: user.email },
+            account: {
+              id: user.id,
+              username: user.username,
+              email: user.email,
+            },
+            profile: {
+              fname: decodedToken.given_name,
+              lname: decodedToken.family_name,
+              picture: decodedToken.picture,
+            },
             exp: getExpDate(accessToken),
           });
           return next();

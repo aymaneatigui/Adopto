@@ -11,17 +11,29 @@ datasource db {
 }
 
 model account {
-  id       String  @id @default(auto()) @map("_id") @db.ObjectId
-  username String  @unique
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  username String   @unique
   email    String?
   googleId String?
   password String?
   token    token[]
+  profile  profile?
 }
 
 model token {
   id        String  @id @default(auto()) @map("_id") @db.ObjectId
   value     String
   accountId String  @db.ObjectId
+  account   account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+}
+
+model profile {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  fname     String?
+  lname     String?
+  bio       String?
+  picture   String?
+  // emailverfifyed
+  accountId String  @unique @db.ObjectId
   account   account @relation(fields: [accountId], references: [id], onDelete: Cascade)
 }

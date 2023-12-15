@@ -14,12 +14,18 @@ const Signup = () => {
     clearUsernameError,
     clearPasswordError,
     loading,
+    usernameErrorMessage,
+    passwordErrorMessage,
+    watch,
   } = useSignup();
+
+  const username = watch("username", "");
+  const newUsername = username.toLowerCase();
 
   return (
     <>
       <section className="mx-auto flex w-full flex-grow items-center justify-center ">
-        <div className="w-96 -translate-y-10 transform bg-slate-50 p-7 sm:w-80">
+        <div className="w-96 -translate-y-10 transform  p-7 sm:w-80">
           {/* <div className="mx-auto w-full"> */}
           {/* <img
               className="mx-auto h-10 w-auto"
@@ -34,12 +40,26 @@ const Signup = () => {
             <div className="relative mt-5">
               <input
                 id="username"
+                value={newUsername}
                 type="text"
-                {...register("username")}
-                placeholder="Enter your username"
+                {...register("username", {
+                  required: "Username is required",
+                  minLength: {
+                    value: 4,
+                    message: "username must be at least 4 characters long",
+                  },
+                  maxLength: {
+                    value: 20,
+                    message: "username must be at most 20 characters long",
+                  },
+                  pattern: {
+                    value: /^[a-zA-Z0-9._]*$/,
+                    message: "Special characters allowed are . and _",
+                  },
+                })}
+                placeholder=""
                 onFocus={clearUsernameError}
-                className={`peer mt-1 w-full border-0 border-b-2  bg-transparent px-2 py-1 font-medium ring-0 placeholder:text-transparent focus:border-b-slate-700 focus:outline-none focus:ring-0 
-                ${usernameError ? "border-red-500" : "border-slate-300 "}
+                className={`peer  mt-1 w-full border-0 border-b-2 border-gray-300  bg-transparent px-2 py-1 font-medium ring-0 placeholder:text-transparent focus:border-b-slate-700 focus:outline-none focus:ring-0 
                 ${loading && "animate-pulse "}
                 `}
                 disabled={loading ? true : false}
@@ -56,16 +76,30 @@ const Signup = () => {
                 Username :
               </label>
             </div>
-            <InputError fieldName={"username"} />
+            <InputError fieldName={"username"} message={usernameErrorMessage} />
             <div className="relative mt-5">
               <input
                 id="password"
                 type="password"
-                placeholder="Enter your password"
-                {...register("password")}
+                placeholder=""
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 4,
+                    message: "Password must be at least 4 characters long",
+                  },
+                  maxLength: {
+                    value: 20,
+                    message: "Password must be at most 20 characters long",
+                  },
+                  pattern: {
+                    value: /^[A-Za-z0-9.@/_#%!$&*-]*$/,
+                    message:
+                      "Special characters allowed: . / @ _ # % ! $ & * -",
+                  },
+                })}
                 onFocus={clearPasswordError}
-                className={`peer mt-1 w-full border-0 border-b-2  bg-transparent px-2 py-1 font-medium ring-0 placeholder:text-transparent focus:border-b-slate-700 focus:outline-none focus:ring-0 
-                ${passwordError ? "border-red-500" : "border-slate-300"}
+                className={`peer mt-1 w-full border-0 border-b-2 border-gray-300  bg-transparent px-2 py-1 font-medium ring-0 placeholder:text-transparent focus:border-b-slate-700 focus:outline-none focus:ring-0 
                 ${loading && "animate-pulse "}
                 `}
                 disabled={loading ? true : false}
@@ -82,7 +116,7 @@ const Signup = () => {
                 Password :
               </label>
             </div>
-            <InputError fieldName={"password"} />
+            <InputError fieldName={"password"} message={passwordErrorMessage} />
 
             <GeneralError />
 
@@ -97,7 +131,7 @@ const Signup = () => {
                 <div className="w-full border-t border-gray-300"></div>
               </div>
               <div className="relative flex cursor-default justify-center text-sm">
-                <span className="bg-slate-50 px-2 text-gray-500 ">
+                <span className="bg-zinc-100 px-2 text-gray-500 ">
                   Or continue with
                 </span>
               </div>

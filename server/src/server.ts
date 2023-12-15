@@ -6,6 +6,7 @@ import cors from "cors";
 import errorHandler from "./errors/errorHandler";
 import protect from "./middleware/protected";
 import authRoute from "./routes/authRoute";
+import profileRoute from "./routes/profileRoute";
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.get("/", protect, (req, res) => {
 });
 
 app.use("/auth", authRoute);
+app.use("/settings", protect, profileRoute);
 
 app.use(errorHandler);
 

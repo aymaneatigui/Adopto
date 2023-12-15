@@ -8,14 +8,23 @@ import { clearErrors } from "../../features/auth/authSlice.jsx";
 const useSignin = () => {
   const dispatch = useDispatch();
 
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch
+  } = useForm();
+
   const { user, error, status } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
   const [usernameError, setUsernameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
 
-  useEffect( () => {
+  const [usernameErrorMessage, setUsernameErrorMessage] = useState(undefined);
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState(undefined);
+
+  useEffect(() => {
     if (user) {
       navigate("/signup");
     }
@@ -39,6 +48,20 @@ const useSignin = () => {
 
   const onSubmit = (credentials) => {
     dispatch(signinAction(credentials));
+    setUsernameErrorMessage(undefined);
+    setPasswordErrorMessage(undefined);
+  };
+  const onError = () => {
+    if (errors) {
+      setUsernameErrorMessage({
+        message: errors?.username?.message,
+        field: "username",
+      });
+      setPasswordErrorMessage({
+        message: errors?.password?.message,
+        field: "password",
+      });
+    }
   };
 
   const clearUsernameError = () => {
@@ -49,16 +72,19 @@ const useSignin = () => {
     setPasswordError(false);
   };
 
-  const loading = status === "loading" ? true : false
+  const loading = status === "loading" ? true : false;
 
   return {
     register,
-    handleSubmit: handleSubmit(onSubmit),
+    handleSubmit: handleSubmit(onSubmit, onError),
     usernameError,
     passwordError,
     clearUsernameError,
     clearPasswordError,
-    loading
+    loading,
+    usernameErrorMessage,
+    passwordErrorMessage,
+    watch
   };
 };
 

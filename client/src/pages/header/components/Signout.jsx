@@ -6,7 +6,7 @@ const Signout = () => {
   const { user } = useSelector((state) => state.auth);
   return (
     <div
-      className="cursor-pointer px-3 py-1 hover:rounded-lg hover:bg-slate-200 hover:bg-opacity-30"
+      className="block cursor-pointer px-4 py-2 hover:bg-zinc-200 hover:bg-opacity-30"
       onClick={() => signout(user?.id)}
     >
       Sign out

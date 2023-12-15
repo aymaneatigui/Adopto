@@ -22,15 +22,17 @@ function Google() {
     //     alt=""
     //   />
     // </div>
-    <button onClick={()=> googleSignin()}
-     className="group w-full h-12 rounded-full border border-gray-300 px-6 transition duration-300 hover:border-gray-400 hover:bg-gray-50 focus:bg-gray-50 active:bg-gray-50">
+    <button
+      onClick={() => googleSignin()}
+      className="group h-10 w-full rounded-full border border-gray-300 px-6 transition duration-300 hover:border-gray-400 hover:bg-gray-50 focus:bg-gray-50 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-zinc-200 active:bg-gray-50"
+    >
       <div className="relative flex items-center justify-center space-x-4">
         <img
           src="https://www.svgrepo.com/show/475656/google-color.svg"
-          className="absolute left-0 w-5"
+          className="w-5"
           alt="google logo"
         />
-        <span className="block w-max ml-2 text-sm font-medium tracking-wide text-gray-900 transition duration-300 group-hover:text-gray-900  sm:text-base">
+        <span className="block  w-max text-sm font-medium tracking-wide text-gray-900 transition duration-300 group-hover:text-gray-900  xs:text-xs">
           Continue with Google
         </span>
       </div>

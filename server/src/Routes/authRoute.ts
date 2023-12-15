@@ -11,8 +11,10 @@ authRoute.post("/signin", authRule(), inputErrors, signin);
 authRoute.post("/signup", authRule(), inputErrors, signup);
 authRoute.post("/signout", signout);
 
+authRoute.post("/google", googleAuth);
+
 authRoute.post("/refresh", refreshToken);
 
-authRoute.post("/google", googleAuth);
+
 
 export default authRoute;

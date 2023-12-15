@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { signinAction } from "../features/auth/authActions";
+import { signinAction } from "../features/auth/authActions.jsx";
 import { useDispatch, useSelector } from "react-redux";
 
 const Profile = () => {

@@ -1,6 +1,7 @@
 import { googleLogout } from "@react-oauth/google";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { removeProfile, setProfile } from "../profile/profileSlice.jsx";
 
 const signin_url = `http://localhost:3001/auth/signin`;
 const signup_url = `http://localhost:3001/auth/signup`;
@@ -12,17 +13,25 @@ export const signinAction = createAsyncThunk(
   "auth/signin",
   async (credentials, { rejectWithValue, dispatch }) => {
     try {
-      const response = await axios.post(signin_url, credentials, {
+      const res = await axios.post(signin_url, credentials, {
         withCredentials: true,
       });
       setTimeout(
         () => {
           dispatch(refresh());
         },
-        (response.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 10000,
+        (res.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 10000,
+      );
+      console.log(res.data);
+      dispatch(
+        setProfile({
+          ...res.profile,
+          email: res.data.account?.email,
+          username: res.data.account?.username,
+        }),
       );
 
-      return response.data;
+      return res.data;
     } catch (error) {
       if (!error.response) {
         throw error;
@@ -36,7 +45,7 @@ export const signupAction = createAsyncThunk(
   "auth/signup",
   async (credentials, { rejectWithValue, dispatch }) => {
     try {
-      const response = await axios.post(signup_url, credentials, {
+      const res = await axios.post(signup_url, credentials, {
         withCredentials: true,
       });
 
@@ -44,10 +53,15 @@ export const signupAction = createAsyncThunk(
         () => {
           dispatch(refresh());
         },
-        (response.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 10000,
+        (res.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 10000,
       );
 
-      return response.data;
+      dispatch(
+        setProfile({
+          username: res.data.account?.username,
+        }),
+      );
+      return res.data;
     } catch (error) {
       if (!error.response) {
         throw error;
@@ -59,13 +73,14 @@ export const signupAction = createAsyncThunk(
 
 export const signoutAction = createAsyncThunk(
   "auth/signout",
-  async (credentials, { rejectWithValue }) => {
+  async (credentials, { rejectWithValue, dispatch }) => {
     try {
-      const response = await axios.post(signout_url, credentials, {
+      const res = await axios.post(signout_url, credentials, {
         withCredentials: true,
       });
       googleLogout();
-      return response.data;
+      dispatch(removeProfile());
+      return res.data;
     } catch (error) {
       if (!error.response) {
         throw error;
@@ -79,7 +94,7 @@ export const refresh = createAsyncThunk(
   "auth/refresh",
   async (_, { rejectWithValue, dispatch, getState }) => {
     try {
-      const response = await axios.post(
+      const res = await axios.post(
         refresh_url,
         {},
         {
@@ -92,9 +107,9 @@ export const refresh = createAsyncThunk(
         () => {
           dispatch(refresh());
         },
-        (response.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 10000,
+        (res.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 10000,
       ); // Refresh 5 seconds before the token expires
-      return response.data;
+      return res.data;
     } catch (error) {
       if (!error.response) {
         throw error;
@@ -113,7 +128,7 @@ export const googleSigninAction = createAsyncThunk(
   "auth/googleSignin",
   async (response, { rejectWithValue, dispatch }) => {
     try {
-      const data = await axios.post(
+      const res = await axios.post(
         google_auth,
         {
           code: response.code,
@@ -130,9 +145,18 @@ export const googleSigninAction = createAsyncThunk(
         () => {
           dispatch(refresh());
         },
-        (data.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 10000,
+        (res.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 10000,
       );
-      return data.data;
+      console.log(res.data);
+      dispatch(
+        setProfile({
+          ...res.data.profile,
+          email: res.data.account?.email,
+          username: res.data.account?.username,
+        }),
+      );
+
+      return res.data;
     } catch (error) {
       if (!error.response) {
         throw error;

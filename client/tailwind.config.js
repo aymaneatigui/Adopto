@@ -10,6 +10,7 @@ export default {
       },
     },
     screens: {
+      xs: { max: "350px" },
       sm: { max: "540px" },
       md: { max: "768px" },
       lg: { max: "1024px" },

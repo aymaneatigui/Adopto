@@ -8,12 +8,20 @@ import { clearErrors } from "../../features/auth/authSlice.jsx";
 const useSignup = () => {
   const dispatch = useDispatch();
 
-  const { register, handleSubmit } = useForm();
-  const { user, error, status} = useSelector((state) => state.auth);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm();
+  const { user, error, status } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
   const [usernameError, setUsernameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+
+  const [usernameErrorMessage, setUsernameErrorMessage] = useState(undefined);
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState(undefined);
 
   useEffect(() => {
     if (user) {
@@ -39,6 +47,20 @@ const useSignup = () => {
 
   const onSubmit = (credentials) => {
     dispatch(signupAction(credentials));
+    setUsernameErrorMessage(undefined);
+    setPasswordErrorMessage(undefined);
+  };
+  const onError = () => {
+    if (errors) {
+      setUsernameErrorMessage({
+        message: errors?.username?.message,
+        field: "username",
+      });
+      setPasswordErrorMessage({
+        message: errors?.password?.message,
+        field: "password",
+      });
+    }
   };
 
   const clearUsernameError = () => {
@@ -53,12 +75,15 @@ const useSignup = () => {
 
   return {
     register,
-    handleSubmit: handleSubmit(onSubmit),
+    handleSubmit: handleSubmit(onSubmit, onError),
     usernameError,
     passwordError,
     clearUsernameError,
     clearPasswordError,
-    loading
+    loading,
+    usernameErrorMessage,
+    passwordErrorMessage,
+    watch,
   };
 };
 

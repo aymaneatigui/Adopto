@@ -2,7 +2,7 @@ const SigninBtn = () => {
   return (
     <button
       type="submit"
-      className="me-2 flex w-auto items-center justify-center whitespace-nowrap rounded-full border border-slate-300 px-5 py-1.5 text-sm font-medium leading-6 text-slate-900 shadow-sm hover:bg-slate-200 hover:bg-opacity-30 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-slate-200"
+      className="me-2 flex w-auto items-center justify-center whitespace-nowrap rounded-full border border-slate-300 px-5 py-1.5 text-sm font-medium leading-6 text-slate-900 shadow-sm hover:bg-gray-50  focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-zinc-200"
     >
       Sign in
       <svg

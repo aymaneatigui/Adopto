@@ -4,7 +4,7 @@ const BtnLoading = () => {
       <button
         disabled
         type="button"
-        className="me-2 inline-flex items-center rounded-full border border-slate-300 px-4 py-2.5 text-sm font-medium text-slate-900 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:text-blue-700 focus:ring-2 focus:ring-blue-700  "
+        className="me-2 inline-flex items-center rounded-full border border-slate-300 px-4 py-2.5 text-sm font-medium text-slate-900 hover:bg-zinc-200 hover:text-blue-700 focus:z-10 focus:text-blue-700 focus:ring-2 focus:ring-blue-700  "
       >
         <svg
           aria-hidden="true"

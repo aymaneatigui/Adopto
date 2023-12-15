@@ -36,8 +36,8 @@ const authentication = createSlice({
       builder.addCase(signinAction.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.error = null;
-        localStorage.setItem("user", JSON.stringify(action.payload.data));
-        state.user = action.payload.data;
+        localStorage.setItem("user", JSON.stringify(action.payload.account));
+        state.user = action.payload.account;
       }),
       //SignUp
       builder.addCase(signupAction.pending, (state) => {
@@ -53,8 +53,8 @@ const authentication = createSlice({
       builder.addCase(signupAction.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.error = null;
-        localStorage.setItem("user", JSON.stringify(action.payload.data));
-        state.user = action.payload.data;
+        localStorage.setItem("user", JSON.stringify(action.payload.account));
+        state.user = action.payload.account;
       }),
       //SignOut
       builder.addCase(signoutAction.fulfilled, (state) => {
@@ -73,11 +73,9 @@ const authentication = createSlice({
           ? (state.error = action.payload.message)
           : (state.error = action.error.message);
       }),
-      builder.addCase(refresh.rejected, (state, action) => {
+      builder.addCase(refresh.rejected, (state) => {
         state.status = "failed";
-        action.payload
-          ? (state.error = action.payload.message)
-          : (state.error = action.error.message);
+        state.error = "Please Signin again";
       }),
       //Signin Google:
       builder.addCase(googleSigninAction.pending, (state) => {
@@ -93,8 +91,8 @@ const authentication = createSlice({
       builder.addCase(googleSigninAction.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.error = null;
-        localStorage.setItem("user", JSON.stringify(action.payload.data));
-        state.user = action.payload.data;
+        localStorage.setItem("user", JSON.stringify(action.payload.account));
+        state.user = action.payload.account;
       });
   },
 });
