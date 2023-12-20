@@ -19,9 +19,7 @@ export const signinAction = createAsyncThunk(
       });
 
       // Calculate the expiration time and store it in local storage
-      const expirationTime =
-        (res.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 10000;
-      localStorage.setItem("expirationTime", expirationTime);
+      localStorage.setItem("expirationTime", res.data.exp);
 
       setTimeout(
         () => {
@@ -57,9 +55,8 @@ export const signupAction = createAsyncThunk(
       });
 
       // Calculate the expiration time and store it in local storage
-      const expirationTime =
-        (res.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 10000;
-      localStorage.setItem("expirationTime", expirationTime);
+
+      localStorage.setItem("expirationTime", res.data.exp);
 
       setTimeout(
         () => {
@@ -99,6 +96,8 @@ export const signoutAction = createAsyncThunk(
       }
       dispatch(removeProfile());
       dispatch(removeUser());
+      localStorage.removeItem("expirationTime");
+
       return rejectWithValue(error.response.data);
     }
   },
@@ -120,13 +119,11 @@ export const refresh = createAsyncThunk(
           googleLogout();
           dispatch(removeProfile());
           dispatch(removeUser());
-          localStorage.removeItem("expirationTime")
+          localStorage.removeItem("expirationTime");
         });
 
       // Calculate the expiration time and store it in local storage
-      const expirationTime =
-        (res.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 10000;
-      localStorage.setItem("expirationTime", expirationTime);
+      localStorage.setItem("expirationTime", res.data.exp);
 
       setTimeout(
         () => {
@@ -148,7 +145,7 @@ export const refresh = createAsyncThunk(
         googleLogout();
         await dispatch(signoutAction({ accountId: user.id }));
         dispatch(removeProfile());
-        localStorage.removeItem("expirationTime")
+        localStorage.removeItem("expirationTime");
         window.location.href = "/signin";
       }
       return rejectWithValue(error.response.data);
@@ -174,9 +171,8 @@ export const googleSigninAction = createAsyncThunk(
         },
       );
       // Calculate the expiration time and store it in local storage
-      const expirationTime =
-        (res.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 10000;
-      localStorage.setItem("expirationTime", expirationTime);
+
+      localStorage.setItem("expirationTime", res.data.exp);
       setTimeout(
         () => {
           console.log("token refreshed from googleSignin");
