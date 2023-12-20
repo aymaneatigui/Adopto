@@ -20,6 +20,12 @@ const authentication = createSlice({
     clearErrors: (state) => {
       state.error = null;
     },
+    removeUser: (state) => {
+      (state.user = null),
+        (state.status = null),
+        (state.error = null),
+        localStorage.removeItem("user");
+    },
   },
   extraReducers(builder) {
     //SignIn
@@ -68,6 +74,7 @@ const authentication = createSlice({
         state.error = null;
       }),
       builder.addCase(signoutAction.rejected, (state, action) => {
+        state.user = null;
         state.status = "failed";
         action.payload
           ? (state.error = action.payload.message)
@@ -96,6 +103,6 @@ const authentication = createSlice({
       });
   },
 });
-export const { clearErrors } = authentication.actions;
+export const { clearErrors, removeUser } = authentication.actions;
 
 export default authentication.reducer;

@@ -1,4 +1,4 @@
-export const Settings = () => {
+export const SettingsIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -16,7 +16,7 @@ export const Settings = () => {
   );
 };
 
-export const Account = () => {
+export const AccountIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -32,7 +32,7 @@ export const Account = () => {
   );
 };
 
-export const ProfilePicture = () => {
+export const ProfilePictureIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

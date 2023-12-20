@@ -2,6 +2,7 @@ import { googleLogout } from "@react-oauth/google";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { removeProfile, setProfile } from "../profile/profileSlice.jsx";
+import { removeUser } from "./authSlice.jsx";
 
 const signin_url = `http://localhost:3001/auth/signin`;
 const signup_url = `http://localhost:3001/auth/signup`;
@@ -16,13 +17,19 @@ export const signinAction = createAsyncThunk(
       const res = await axios.post(signin_url, credentials, {
         withCredentials: true,
       });
+
+      // Calculate the expiration time and store it in local storage
+      const expirationTime =
+        (res.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 10000;
+      localStorage.setItem("expirationTime", expirationTime);
+
       setTimeout(
         () => {
           dispatch(refresh());
+          console.log("token refreshed from signin");
         },
         (res.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 10000,
       );
-      console.log(res.data);
       dispatch(
         setProfile({
           ...res.profile,
@@ -48,6 +55,11 @@ export const signupAction = createAsyncThunk(
       const res = await axios.post(signup_url, credentials, {
         withCredentials: true,
       });
+
+      // Calculate the expiration time and store it in local storage
+      const expirationTime =
+        (res.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 10000;
+      localStorage.setItem("expirationTime", expirationTime);
 
       setTimeout(
         () => {
@@ -85,6 +97,8 @@ export const signoutAction = createAsyncThunk(
       if (!error.response) {
         throw error;
       }
+      dispatch(removeProfile());
+      dispatch(removeUser());
       return rejectWithValue(error.response.data);
     }
   },
@@ -94,29 +108,47 @@ export const refresh = createAsyncThunk(
   "auth/refresh",
   async (_, { rejectWithValue, dispatch, getState }) => {
     try {
-      const res = await axios.post(
-        refresh_url,
-        {},
-        {
-          withCredentials: true,
-        },
-      );
+      const res = await axios
+        .post(
+          refresh_url,
+          {},
+          {
+            withCredentials: true,
+          },
+        )
+        .catch(() => {
+          googleLogout();
+          dispatch(removeProfile());
+          dispatch(removeUser());
+          localStorage.removeItem("expirationTime")
+        });
 
-      // Set a timeout to refresh the token a bit before it expires
+      // Calculate the expiration time and store it in local storage
+      const expirationTime =
+        (res.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 10000;
+      localStorage.setItem("expirationTime", expirationTime);
+
       setTimeout(
         () => {
+          console.log("token refreshed from refresh");
+
           dispatch(refresh());
         },
         (res.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 10000,
-      ); // Refresh 5 seconds before the token expires
+      );
+
       return res.data;
     } catch (error) {
       if (!error.response) {
         throw error;
       }
+
       if (error.response.data.message === "invalide refreshtoken") {
         const { user } = getState().auth;
+        googleLogout();
         await dispatch(signoutAction({ accountId: user.id }));
+        dispatch(removeProfile());
+        localStorage.removeItem("expirationTime")
         window.location.href = "/signin";
       }
       return rejectWithValue(error.response.data);
@@ -141,13 +173,17 @@ export const googleSigninAction = createAsyncThunk(
           },
         },
       );
+      // Calculate the expiration time and store it in local storage
+      const expirationTime =
+        (res.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 10000;
+      localStorage.setItem("expirationTime", expirationTime);
       setTimeout(
         () => {
+          console.log("token refreshed from googleSignin");
           dispatch(refresh());
         },
         (res.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 10000,
       );
-      console.log(res.data);
       dispatch(
         setProfile({
           ...res.data.profile,

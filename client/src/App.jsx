@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import { Provider } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import store from "./store";
 
 import Header from "./pages/header/Header.jsx";
@@ -11,6 +11,8 @@ import Signup from "./pages/auth/Signup";
 import Protected from "./Protected.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import Settings from "./pages/Settings/Settings.jsx";
+import { useEffect } from "react";
+import { refresh } from "./features/auth/authActions.jsx";
 
 const App = () => {
   return (
@@ -21,22 +23,37 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route
-              path="/settings"
+              path="/settings/*"
               element={
                 <Protected>
                   <Settings />
                 </Protected>
               }
             />
-            {/* <Route path="/settings/account" element={<Protected><Account /></Protected>} /> */}
             <Route path="/signin" element={<Signin />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Router>
+        <AppContent />
       </Provider>
     </div>
   );
+};
+
+const AppContent = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (localStorage.getItem("expirationTime")) {
+      const expirationTime = localStorage.getItem("expirationTime");
+      const currentTime = Date.now();
+      if (currentTime >= expirationTime) {
+        dispatch(refresh());
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 };
 
 export default App;

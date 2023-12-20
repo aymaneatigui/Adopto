@@ -7,6 +7,9 @@ import {
   getExpDate,
   saveRefreshToken,
 } from "../utils/jwt";
+import { downloadImage, toBase64 } from "../utils/img";
+
+// Initialize OAuth2Client with Google Client ID, Secret and redirect URI
 
 const oAuth2Client = new OAuth2Client(
   process.env.GOOGLE_CLIENT_ID,
@@ -14,24 +17,39 @@ const oAuth2Client = new OAuth2Client(
   "postmessage"
 );
 
+// Define the googleAuth function
+
 export const googleAuth = async (req, res, next) => {
   let decodedToken;
   try {
+    // Check if the request type is 'onetape'
+
     if (req.body.type == "onetape") {
       decodedToken = jwt.decode(req.body.code) as JwtPayload;
     } else {
+      // Get tokens and user data from Google
+
       const { tokens } = await oAuth2Client.getToken(req.body.code);
       if (tokens.id_token) {
+        // Decode the ID token
+
         decodedToken = jwt.decode(tokens.id_token) as JwtPayload;
       }
     }
 
+    // If the token is decoded successfully
+
     if (decodedToken) {
+      // Check if the user exists in the database
+
       const userExsit = await prisma.account.findFirst({
         where: {
           AND: [{ googleId: decodedToken.sub }, { email: decodedToken.email }],
         },
       });
+
+      // If the user exists -----------------------------------
+
       if (userExsit) {
         //Sign In
         const accessToken = generateAccessToken(userExsit);
@@ -43,6 +61,12 @@ export const googleAuth = async (req, res, next) => {
           path: "/auth/refresh",
         });
 
+        const userProfile = await prisma.profile.findFirst({
+          where: {
+            accountId: userExsit.id,
+          },
+        });
+
         res.status(200).json({
           status: "success",
           message: "authentication successful",
@@ -52,13 +76,14 @@ export const googleAuth = async (req, res, next) => {
             email: userExsit.email,
           },
           profile: {
-            fname: decodedToken.given_name,
-            lname: decodedToken.family_name,
-            picture: decodedToken.picture,
+            ...userProfile,
+            picture: toBase64(userProfile.picture),
           },
           exp: getExpDate(accessToken),
         });
         return next();
+
+        // If the user does not exist, check if the email or Google ID is already used
       } else {
         const ex = await prisma.account.findFirst({
           where: {
@@ -74,6 +99,8 @@ export const googleAuth = async (req, res, next) => {
           let exsit;
           let username;
           let n = 0;
+
+          // Generate a username from the decoded token's name
 
           username = String(decodedToken.name).toLowerCase().replace(/ /g, "");
           exsit = await prisma.account.findFirst({
@@ -101,13 +128,14 @@ export const googleAuth = async (req, res, next) => {
               email: decodedToken.email,
             },
           });
+          const imageBinary = await downloadImage(decodedToken.picture);
           try {
             await prisma.profile.create({
               data: {
                 accountId: user.id,
                 fname: decodedToken.given_name,
                 lname: decodedToken.family_name,
-                picture: decodedToken.picture,
+                picture: imageBinary,
               },
             });
           } catch (error) {
@@ -139,7 +167,7 @@ export const googleAuth = async (req, res, next) => {
             profile: {
               fname: decodedToken.given_name,
               lname: decodedToken.family_name,
-              picture: decodedToken.picture,
+              picture: toBase64(imageBinary),
             },
             exp: getExpDate(accessToken),
           });

@@ -1,12 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import Signout from "./Signout.jsx";
-import { Account, ProfilePicture, Settings } from "../Icons/Icons.jsx";
+import {
+  AccountIcon,
+  ProfilePictureIcon,
+  SettingsIcon,
+} from "../Icons/Icons.jsx";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const Dropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { profile } = useSelector((state) => state.profile);
+  const { profile, profileImg } = useSelector((state) => state.profile);
   const node = useRef();
   const [imgError, setImgError] = useState(false);
 
@@ -34,15 +38,15 @@ const Dropdown = () => {
         className="block shrink-0 cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
       >
-        {profile?.picture && !imgError ? (
+        {profileImg && !imgError ? (
           <img
-            src={profile?.picture}
+            src={profileImg}
             alt="profile"
             className="h-9 w-9 rounded-full object-cover"
             onError={handleError}
           />
         ) : (
-          <ProfilePicture />
+          <ProfilePictureIcon />
         )}
       </div>
       {isOpen && (
@@ -60,32 +64,32 @@ const Dropdown = () => {
             </li>
 
             <li>
-              <a className="block cursor-pointer px-4 py-2 hover:bg-zinc-200 hover:bg-opacity-30 ">
-                <Link
-                  className="text-sm text-gray-900 "
-                  to={"/settings/profile"}
-                  onClick={() => setIsOpen(false)}
-                >
+              <Link
+                className="text-sm text-gray-900 "
+                to={"/settings/profile"}
+                onClick={() => setIsOpen(false)}
+              >
+                <div className="block cursor-pointer px-4 py-2 hover:bg-zinc-200 hover:bg-opacity-30 ">
                   <div className="flex items-center gap-2">
-                    <Account />
-                    Account
+                    <AccountIcon />
+                    Profile
                   </div>
-                </Link>
-              </a>
+                </div>
+              </Link>
             </li>
             <li>
-              <a className="block cursor-pointer px-4 py-2 hover:bg-zinc-200 hover:bg-opacity-30">
-                <Link
-                  className="text-sm text-gray-900 "
-                  to={"/profile"}
-                  onClick={() => setIsOpen(false)}
-                >
+              <Link
+                className="text-sm text-gray-900 "
+                to={"/settings"}
+                onClick={() => setIsOpen(false)}
+              >
+                <div className="block cursor-pointer px-4 py-2 hover:bg-zinc-200 hover:bg-opacity-30">
                   <div className="flex items-center gap-2">
-                    <Settings />
+                    <SettingsIcon />
                     Settings
                   </div>
-                </Link>
-              </a>
+                </div>
+              </Link>
             </li>
             <li>
               <div className="mx-auto mt-3 h-[1px] w-36 bg-zinc-300"></div>

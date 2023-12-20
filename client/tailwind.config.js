@@ -17,5 +17,5 @@ export default {
       xl: { max: "1280px" },
     },
   },
-  plugins: [forms],
+  plugins: [forms, require("tailwind-scrollbar")({ nocompatible: true })],
 };

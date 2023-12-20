@@ -1,5 +1,21 @@
+import { Navigate, Route, Routes } from "react-router-dom";
+import SideBar from "./SideBar.jsx";
+import Accounts from "./settingsPages/Accounts.jsx";
+import NotFound from "../NotFound.jsx";
+import Profile from "../Profile.jsx";
+
 const Settings = () => {
-  return <div>Settings</div>;
+  return (
+    <>
+      <SideBar />
+      <Routes>
+        <Route path="/" element={<Navigate to="account" replace/>} />
+        <Route path="/account/" element={<Accounts />} />
+        <Route path="/support/" element={<Profile />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </>
+  );
 };
 
 export default Settings;

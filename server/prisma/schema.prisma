@@ -32,7 +32,7 @@ model profile {
   fname     String?
   lname     String?
   bio       String?
-  picture   String?
+  picture   Bytes?
   // emailverfifyed
   accountId String  @unique @db.ObjectId
   account   account @relation(fields: [accountId], references: [id], onDelete: Cascade)

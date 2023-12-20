@@ -1,10 +1,34 @@
 import { Link } from "react-router-dom";
 import Signin from "./components/Signin.jsx";
 import Signup from "./components/Signup.jsx";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Dropdown from "./components/Dropdown.jsx";
+import { useEffect } from "react";
+import { setprofileImg } from "../../features/profile/profileSlice.jsx";
 const Header = () => {
   const { user } = useSelector((state) => state.auth);
+  const { profile } = useSelector((state) => state.profile);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    let blobUrl;
+    const loadImage = async () => {
+      if (profile?.picture) {
+        // Convert the Base64 string to a Blob
+        const response = await fetch(profile?.picture);
+        const blob = await response.blob();
+        blobUrl = URL.createObjectURL(blob);
+        dispatch(setprofileImg(blobUrl));
+      }
+    };
+
+    loadImage();
+    return () => {
+      if (blobUrl) {
+        URL.revokeObjectURL(blobUrl);
+      }
+    };
+  }, [dispatch, profile]);
 
   return (
     <header className="z-10 flex h-14 w-full items-center justify-between px-12  pt-2 text-slate-900">
