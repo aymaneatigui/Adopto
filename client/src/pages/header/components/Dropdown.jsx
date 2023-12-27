@@ -4,7 +4,7 @@ import {
   AccountIcon,
   ProfilePictureIcon,
   SettingsIcon,
-} from "../Icons/Icons.jsx";
+} from "../../../Icons/Icons.jsx";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -46,7 +46,9 @@ const Dropdown = () => {
             onError={handleError}
           />
         ) : (
-          <ProfilePictureIcon />
+          <div className="w-7">
+            <ProfilePictureIcon />
+          </div>
         )}
       </div>
       {isOpen && (

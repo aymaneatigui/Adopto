@@ -8,6 +8,7 @@ export default {
       fontFamily: {
         inter: ["inter", "sans"],
       },
+      width: ['important'],
     },
     screens: {
       xs: { max: "350px" },

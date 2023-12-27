@@ -5,7 +5,7 @@ const SideBar = () => {
   let param = useParams();
   let params = param["*"];
   return (
-    <aside className="fixed inset-0 z-10 mb-4 ml-10 mt-20 flex h-[calc(100vh-100px)] w-44 flex-col bg-transparent py-3 pl-5 text-slate-900">
+    <aside className="fixed inset-0 z-10 mb-4 ml-10 mt-20 flex h-[calc(100vh-100px)] w-44 flex-col  bg-transparent py-3 pl-5 text-slate-900 lg:ml-5 lg:w-32 lg:pl-3">
       <Link
         to={"profile"}
         className={`my-3 h-fit w-fit cursor-pointer px-4 transition hover:border-l-2  hover:border-gray-300 hover:font-medium

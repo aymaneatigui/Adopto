@@ -10,6 +10,8 @@ const signout_url = `http://localhost:3001/auth/signout`;
 const refresh_url = `http://localhost:3001/auth/refresh`;
 const google_auth = `http://localhost:3001/auth/google`;
 
+const update_account_url = `http://localhost:3001/api/settings/account`;
+
 export const signinAction = createAsyncThunk(
   "auth/signin",
   async (credentials, { rejectWithValue, dispatch }) => {
@@ -67,9 +69,12 @@ export const signupAction = createAsyncThunk(
 
       dispatch(
         setProfile({
+          ...res.data.profile,
+          email: res.data.account?.email,
           username: res.data.account?.username,
         }),
       );
+
       return res.data;
     } catch (error) {
       if (!error.response) {
@@ -183,6 +188,43 @@ export const googleSigninAction = createAsyncThunk(
       dispatch(
         setProfile({
           ...res.data.profile,
+          email: res.data.account?.email,
+          username: res.data.account?.username,
+        }),
+      );
+
+      return res.data;
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const updateAccount = createAsyncThunk(
+  "auth/updateAccount",
+  async (credentials, { rejectWithValue, dispatch, getState }) => {
+    try {
+      const res = await axios.put(update_account_url, credentials, {
+        withCredentials: true,
+      });
+
+      localStorage.setItem("expirationTime", res.data.exp);
+
+      setTimeout(
+        () => {
+          dispatch(refresh());
+        },
+        (res.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 10000,
+      );
+
+      const { profile } = getState().profile;
+
+      dispatch(
+        setProfile({
+          ...profile,
           email: res.data.account?.email,
           username: res.data.account?.username,
         }),

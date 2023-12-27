@@ -39,7 +39,7 @@ export const ProfilePictureIcon = () => {
       data-name="Layer 1"
       viewBox="0 0 512 512"
       id="profile"
-      className="w-7"
+      // className="w-7"
     >
       <circle cx="256" cy="256" r="256" fill="#c0c6d1"></circle>
       <circle cx="256" cy="142.83" r="84.2" fill="#f6f7f8"></circle>
@@ -51,6 +51,17 @@ export const ProfilePictureIcon = () => {
         fill="#37a1f7"
         d="M345.1,381.26,325.82,389a15,15,0,0,1-11.12,0l-19.27-7.76a9.81,9.81,0,0,1-6.17-9.11V319.23a8,8,0,0,1,7.95-7.94h46.1a8,8,0,0,1,7.95,7.94v52.92A9.81,9.81,0,0,1,345.1,381.26Z"
       ></path> */}
+    </svg>
+  );
+};
+
+export const CameraIcon = () => {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" id="camera">
+      <path
+        fill="white"
+        d="M10 8a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm8-3h-2.4a.888.888 0 0 1-.789-.57l-.621-1.861A.89.89 0 0 0 13.4 2H6.6c-.33 0-.686.256-.789.568L5.189 4.43A.889.889 0 0 1 4.4 5H2C.9 5 0 5.9 0 7v9c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-8 11a5 5 0 0 1-5-5 5 5 0 1 1 10 0 5 5 0 0 1-5 5zm7.5-7.8a.7.7 0 1 1 0-1.4.7.7 0 0 1 0 1.4z"
+      ></path>
     </svg>
   );
 };

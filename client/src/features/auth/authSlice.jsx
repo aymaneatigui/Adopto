@@ -5,12 +5,16 @@ import {
   signinAction,
   signoutAction,
   signupAction,
+  updateAccount,
 } from "./authActions";
 
 const initialState = {
   status: null,
   error: null,
-  user: JSON.parse(localStorage.getItem("user")) || null,
+  user:
+    localStorage.getItem("user") && localStorage.getItem("user") !== "undefined"
+      ? JSON.parse(localStorage.getItem("user"))
+      : null,
 };
 
 const authentication = createSlice({
@@ -19,6 +23,12 @@ const authentication = createSlice({
   reducers: {
     clearErrors: (state) => {
       state.error = null;
+    },
+    setUser: (state, action) => {
+      state.status = "succeeded";
+      state.error = null;
+      localStorage.setItem("user", JSON.stringify(action.payload.account));
+      state.user = action.payload.account;
     },
     removeUser: (state) => {
       (state.user = null),
@@ -100,9 +110,22 @@ const authentication = createSlice({
         state.error = null;
         localStorage.setItem("user", JSON.stringify(action.payload.account));
         state.user = action.payload.account;
+      }),
+      //UpdateAccount:
+      builder.addCase(updateAccount.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.error = null;
+        localStorage.setItem("user", JSON.stringify(action.payload.account));
+        state.user = action.payload.account;
+      }),
+      builder.addCase(updateAccount.rejected, (state, action) => {
+        state.status = "failed";
+        action.payload
+          ? (state.error = action.payload.message)
+          : (state.error = action.error.message);
       });
   },
 });
-export const { clearErrors, removeUser } = authentication.actions;
+export const { clearErrors, removeUser, setUser } = authentication.actions;
 
 export default authentication.reducer;

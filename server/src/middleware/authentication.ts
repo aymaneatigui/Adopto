@@ -16,6 +16,9 @@ export const signin = async (req, res, next) => {
       where: {
         username: req.body.username,
       },
+      include: {
+        profile: true,
+      },
     });
     if (user === null) {
       const err = new Error("incorect username or password");
@@ -45,7 +48,7 @@ export const signin = async (req, res, next) => {
       status: "success",
       message: "authentication successful",
       account: { id: user.id, username: user.username, email: user.email },
-      profile: {},
+      profile: user.profile,
       exp: getExpDate(accessToken),
     });
     next();
@@ -82,8 +85,9 @@ export const signup = async (req, res, next) => {
       },
     });
 
+    let profile;
     try {
-      await prisma.profile.create({
+      profile = await prisma.profile.create({
         data: {
           accountId: user.id,
         },
@@ -110,7 +114,7 @@ export const signup = async (req, res, next) => {
       status: "success",
       message: "user successfully created.",
       account: { id: user.id, username: user.username },
-      profile: {},
+      profile: profile,
       exp: getExpDate(accessToken),
     });
     next();

@@ -8,23 +8,3 @@
   box-sizing: border-box;
 }
 
-/* @layer utilities {
-  .scrollbar::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-
-  .scrollbar::-webkit-scrollbar-track {
-    border-radius: 100vh;
-    background: transparent;
-  }
-
-  .scrollbar::-webkit-scrollbar-thumb {
-    background: rgb(218, 218, 218);
-    border-radius: 100vh;
-  }
-
-  .scrollbar::-webkit-scrollbar-thumb:hover {
-    background: rgb(156, 156, 156);
-  }
-} */

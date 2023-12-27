@@ -27,7 +27,7 @@ app.get("/", protect, (req, res) => {
 });
 
 app.use("/auth", authRoute);
-app.use("/settings", protect, profileRoute);
+app.use("/api/settings", protect, profileRoute);
 
 app.use(errorHandler);
 
