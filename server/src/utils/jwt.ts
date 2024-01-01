@@ -17,7 +17,7 @@ export const generateRefreshToken = (user) => {
   return jwt.sign(
     { accountId: user.id, username: user.username },
     process.env.JWT_REFRESH_SECRET,
-    { expiresIn: "1d" }
+    { expiresIn: "7d" }
   );
 };
 
