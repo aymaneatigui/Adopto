@@ -43,9 +43,6 @@ export const updateAccount = async (req, res, next) => {
       },
       data: updateData,
     });
-
-    console.log(user);
-
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
     await saveRefreshToken(refreshToken);

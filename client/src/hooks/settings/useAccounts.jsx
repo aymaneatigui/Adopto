@@ -22,7 +22,6 @@ const useAccounts = () => {
     const data = Object.fromEntries(
       Object.entries(obj).filter(([, value]) => value !== ""),
     );
-    console.log(data);
     dispatch(updateAccount(data));
     setUsernameErrorMessage(undefined);
     setEmailErrorMessage(undefined);

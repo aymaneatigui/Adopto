@@ -28,7 +28,7 @@ export const signinAction = createAsyncThunk(
           dispatch(refresh());
           console.log("token refreshed from signin");
         },
-        (res.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 10000,
+        (res.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 20000,
       );
       dispatch(
         setProfile({
@@ -64,7 +64,7 @@ export const signupAction = createAsyncThunk(
         () => {
           dispatch(refresh());
         },
-        (res.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 10000,
+        (res.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 20000,
       );
 
       dispatch(
@@ -136,7 +136,7 @@ export const refresh = createAsyncThunk(
 
           dispatch(refresh());
         },
-        (res.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 10000,
+        (res.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 20000,
       );
 
       return res.data;
@@ -217,7 +217,7 @@ export const updateAccount = createAsyncThunk(
         () => {
           dispatch(refresh());
         },
-        (res.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 10000,
+        (res.data.exp - Math.floor(Date.now() / 1000)) * 1000 - 20000,
       );
 
       const { profile } = getState().profile;
