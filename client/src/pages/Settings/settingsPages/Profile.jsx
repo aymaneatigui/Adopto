@@ -5,10 +5,17 @@ import { CameraIcon, ProfilePictureIcon } from "../../../Icons/Icons.jsx";
 import { useSelector } from "react-redux";
 import useProfile from "../../../hooks/settings/useProfile.jsx";
 import InputError from "../../error/InputError.jsx";
+import Modalimg from "./Components/modalimg.jsx";
 
 const Profile = () => {
   const { profileImg } = useSelector((state) => state.profile);
   const [imgError, setImgError] = useState(false);
+
+  const [isModalimgOpen, setModalimgOpen] = useState(false);
+
+  const toggleModalimg = () => {
+    setModalimgOpen(!isModalimgOpen);
+  };
 
   const handleError = () => {
     setImgError(true);
@@ -49,8 +56,10 @@ const Profile = () => {
               {/*---------- Profile Picture ----------*/}
               <div className="z-10 -mt-20 flex w-full justify-center">
                 <div
-                  className={`relative flex h-28 w-28 items-center justify-center rounded-full bg-slate-900 object-cover`}
+                  className={`relative flex h-28 w-28 select-none items-center justify-center rounded-full bg-slate-900 object-cover`}
+                  onClick={toggleModalimg}
                 >
+                  <Modalimg isOpen={isModalimgOpen} onClose={toggleModalimg} />
                   {profileImg && !imgError ? (
                     <img
                       src={profileImg}
