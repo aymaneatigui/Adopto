@@ -22,8 +22,8 @@ const useProfile = () => {
     const data = Object.fromEntries(
       Object.entries(obj).filter(([, value]) => value !== ""),
     );
-    console.log(data)
-    dispatch(updateProfile(data));
+      dispatch(updateProfile(data));
+  
     reset();
   };
 
@@ -55,7 +55,6 @@ const useProfile = () => {
     setBioErrorMessage(undefined);
   };
 
-
   return {
     profile,
     register,
@@ -65,7 +64,7 @@ const useProfile = () => {
     clearBioError,
     fnameErrorMessage,
     lnameErrorMessage,
-    bioErrorMessage
+    bioErrorMessage,
   };
 };
 
