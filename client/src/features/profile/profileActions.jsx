@@ -6,11 +6,22 @@ const update_profile_url = `http://localhost:3001/api/settings/profile`;
 
 export const updateProfile = createAsyncThunk(
   "auth/updateProfile",
-  async (credentials, { rejectWithValue, dispatch }) => {
+  async (data, { rejectWithValue, dispatch }) => {
     try {
-      const res = await axios.put(update_profile_url, credentials, {
+      let config = {
         withCredentials: true,
-      });
+      };
+
+      if (data?.picture instanceof File) {
+        const formData = new FormData();
+        for (const key in data) {
+          formData.append(key, data[key]);
+        }
+        config.headers = { "Content-Type": "multipart/form-data" };
+        data = formData;
+      }
+      const res = await axios.put(update_profile_url, data, config);
+
       dispatch(setUser(res.data));
       return res.data;
     } catch (error) {
