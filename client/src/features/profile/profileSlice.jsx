@@ -6,6 +6,7 @@ const initialState = {
   error: null,
   profile: JSON.parse(localStorage.getItem("profile")) || null,
   profileImg: null,
+  uploadProgress: 0,
 };
 
 const profile = createSlice({
@@ -27,7 +28,11 @@ const profile = createSlice({
       localStorage.removeItem("profile");
     },
     setprofileImg: (state, action) => {
+      console.log("setProfilecalled")
       state.profileImg = action.payload;
+    },
+    setUploadProgress: (state, action) => {
+      state.uploadProgress = action.payload;
     },
   },
   extraReducers(builder) {
@@ -45,17 +50,19 @@ const profile = createSlice({
         state.status = "succeeded";
         state.error = null;
         state.profileImg = null;
+        state.uploadProgress = 0;
 
-        const profile = {
+        const pro = {
           ...action.payload.profile,
           username: action.payload.account?.username,
           email: action.payload.account?.email,
         };
-        localStorage.setItem("profile", JSON.stringify(profile));
+        localStorage.removeItem("profile")
+        localStorage.setItem("profile", JSON.stringify(pro));
         state.profile = profile;
       });
   },
 });
-export const { removeProfile, setProfile, setprofileImg } = profile.actions;
+export const { removeProfile, setProfile, setprofileImg, setUploadProgress } = profile.actions;
 
 export default profile.reducer;

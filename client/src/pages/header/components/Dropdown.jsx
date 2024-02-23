@@ -44,6 +44,7 @@ const Dropdown = () => {
             alt="profile"
             className="h-9 w-9 rounded-full object-cover"
             onError={handleError}
+            key={profileImg}
           />
         ) : (
           <div className="w-7">
@@ -52,7 +53,7 @@ const Dropdown = () => {
         )}
       </div>
       {isOpen && (
-        <div className="absolute   -right-7 top-10 z-10 w-44 divide-y-reverse rounded-lg border border-slate-300 bg-gray-50  shadow-lg ">
+        <div className="absolute   -right-7 top-10 z-50 w-44 divide-y-reverse rounded-lg border border-slate-300 bg-gray-50  shadow-lg ">
           <ul className="py-2 text-sm text-slate-900">
             <li>
               <div className="px-4 py-3 text-center text-sm text-gray-900 ">

@@ -72,7 +72,7 @@ const Profile = () => {
                       <ProfilePictureIcon />
                     </div>
                   )}
-                  <div className="group absolute z-20 flex h-full w-full cursor-pointer items-center justify-center rounded-full transition hover:bg-[#4b4c4fbb]">
+                  <div className="group absolute  flex h-full w-full cursor-pointer items-center justify-center rounded-full transition hover:bg-[#4b4c4fbb]">
                     <div className="flex h-7 w-7 items-center justify-center opacity-0 transition-opacity group-hover:opacity-100">
                       <CameraIcon />
                     </div>

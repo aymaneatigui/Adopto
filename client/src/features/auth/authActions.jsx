@@ -12,11 +12,15 @@ const google_auth = `http://localhost:3001/auth/google`;
 
 const update_account_url = `http://localhost:3001/api/settings/account`;
 
+const api = axios.create({
+  headers: { "Cache-Control": "no-cache" },
+});
+
 export const signinAction = createAsyncThunk(
   "auth/signin",
   async (credentials, { rejectWithValue, dispatch }) => {
     try {
-      const res = await axios.post(signin_url, credentials, {
+      const res = await api.post(signin_url, credentials, {
         withCredentials: true,
       });
 
@@ -52,7 +56,7 @@ export const signupAction = createAsyncThunk(
   "auth/signup",
   async (credentials, { rejectWithValue, dispatch }) => {
     try {
-      const res = await axios.post(signup_url, credentials, {
+      const res = await api.post(signup_url, credentials, {
         withCredentials: true,
       });
 
@@ -89,7 +93,7 @@ export const signoutAction = createAsyncThunk(
   "auth/signout",
   async (credentials, { rejectWithValue, dispatch }) => {
     try {
-      const res = await axios.post(signout_url, credentials, {
+      const res = await api.post(signout_url, credentials, {
         withCredentials: true,
       });
       googleLogout();
@@ -112,7 +116,7 @@ export const refresh = createAsyncThunk(
   "auth/refresh",
   async (_, { rejectWithValue, dispatch, getState }) => {
     try {
-      const res = await axios
+      const res = await api
         .post(
           refresh_url,
           {},
@@ -162,7 +166,7 @@ export const googleSigninAction = createAsyncThunk(
   "auth/googleSignin",
   async (response, { rejectWithValue, dispatch }) => {
     try {
-      const res = await axios.post(
+      const res = await api.post(
         google_auth,
         {
           code: response.code,
@@ -207,7 +211,7 @@ export const updateAccount = createAsyncThunk(
   "auth/updateAccount",
   async (credentials, { rejectWithValue, dispatch, getState }) => {
     try {
-      const res = await axios.put(update_account_url, credentials, {
+      const res = await api.put(update_account_url, credentials, {
         withCredentials: true,
       });
 

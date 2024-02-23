@@ -2,8 +2,12 @@ import fs from 'fs/promises';
 import axios from "axios";
 import sharp from "sharp";
 
+
 export const downloadImage = async (imageUrl) => {
-  const response = await axios.get(imageUrl, { responseType: "arraybuffer" });
+  const api = axios.create({
+    headers: { "Cache-Control": "no-cache" },
+  });
+  const response = await api.get(imageUrl, { responseType: "arraybuffer" });
   const buffer = Buffer.from(response.data, "binary");
 
   const jpegBuffer = await sharp(buffer).jpeg().toBuffer();

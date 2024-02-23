@@ -7,6 +7,10 @@ const store = configureStore({
     auth: authSlice,
     profile: profileSlice,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export default store;

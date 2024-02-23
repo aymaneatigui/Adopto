@@ -18,6 +18,7 @@ const Header = () => {
         const response = await fetch(profile?.picture);
         const blob = await response.blob();
         blobUrl = URL.createObjectURL(blob);
+
         dispatch(setprofileImg(blobUrl));
       }
     };
@@ -29,6 +30,42 @@ const Header = () => {
       }
     };
   }, [dispatch, profile]);
+
+  // useEffect(() => {
+  //   let blobUrl;
+  //   const loadImage = async () => {
+  //     try {
+  //       if (profile?.picture) {
+  //         const cacheBustingUrl = `${profile.picture}?t=${Date.now()}`;
+  //         const response = await fetch(cacheBustingUrl);
+
+  //         if (!response.ok) {
+  //           throw new Error(`Failed to fetch image: ${response.statusText}`);
+  //         }
+
+  //         const blob = await response.blob();
+  //         const blobUrl = URL.createObjectURL(blob);
+  //         dispatch(setprofileImg(blobUrl));
+  //       }
+  //     } catch (error) {
+  //       console.error('Error fetching or processing the image:', error);
+  //     }
+  //   };
+
+  //   loadImage();
+  //   return () => {
+  //     if (blobUrl) {
+  //       URL.revokeObjectURL(blobUrl);
+  //     }
+  //   };
+  // }, [dispatch, profile]);
+
+  // useEffect(() => {
+  //   if (profile?.picture) {
+  //     // Directly dispatch the base64 string
+  //     dispatch(setprofileImg(profile.picture));
+  //   }
+  // }, [dispatch, profile]);
 
   return (
     <header className="z-10 flex h-14 w-full items-center justify-between px-12  pt-2 text-slate-900">
